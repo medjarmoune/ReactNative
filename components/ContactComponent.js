@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 import { Card } from 'react-native-elements'
 
 function ContactUs () {
@@ -21,9 +21,7 @@ Email:confusion@food.net`}
 class Contact extends Component {
     render() {
         return (
-            // <View style={{flex:1}}>
                 <ContactUs/>
-            // </View>
         )
     }
 }
