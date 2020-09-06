@@ -9,6 +9,7 @@ import Dishdetail from './DIshdetailComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
+import Reservation from './ReservationComponent';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
@@ -33,6 +34,7 @@ const MenuNavigator    = createStackNavigator();
 const HomeNavigator    = createStackNavigator();
 const AboutNavigator   = createStackNavigator();
 const ContactNavigator = createStackNavigator();
+const ReserveNavigator = createStackNavigator();
 
 const MainNavigator    = createDrawerNavigator();
 
@@ -71,6 +73,39 @@ function MenuNavigatorScreen(){
   )
 }
 
+
+function ReserveNavigatoreScreen () {
+  return(
+    <ReserveNavigator.Navigator
+      screenOptions={{
+          headerStyle: {
+          backgroundColor: "#512DA8"
+        },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+          color: "#fff"            
+        }
+      }}
+    >
+        <ReserveNavigator.Screen name='Reserve' component={Reservation}
+          options={
+            ({navigation}) => ({
+                headerLeft: () => (
+                    <Icon 
+                        name='menu' 
+                        size={24}
+                        color='white'
+                        onPress={() => 
+                            navigation.toggleDrawer()}
+                    />
+                )
+            
+            })
+         }
+        />
+    </ReserveNavigator.Navigator>
+  )
+}
 function HomeNavigatoreScreen () {
   return(
     <HomeNavigator.Navigator
@@ -223,6 +258,18 @@ function MainNavigatorDrawer(){
             drawerIcon: ({tintColor}) => (
                 <Icon
                     name='list'
+                    type='font-awesome'
+                    size={24}
+                    color={tintColor}
+                />
+            )
+          }}
+        />
+        <MainNavigator.Screen name="Reserve Table" component={ReserveNavigatoreScreen} 
+          options={{
+            drawerIcon: ({tintColor}) => (
+                <Icon
+                    name='cutlery'
                     type='font-awesome'
                     size={24}
                     color={tintColor}
