@@ -56,29 +56,29 @@ class Reservation extends Component {
                     </Switch>
                 </View>
                 <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Date</Text>
-                <DatePicker
-                    style={{width: 200}}
-                    date={this.state.date}
-                    mode="date"
-                    placeholder="select date"
-                    format="YYYY-MM-DD"
-                    minDate="2020-09-06"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    customStyles={{
-                    dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0
-                    },
-                    dateInput: {
-                        marginLeft: 36
-                    }
-                    }}
-                    onDateChange={(date) => {this.setState({date: date})}}
-                />
+                    <Text style={styles.formLabel}>Date</Text>
+                    <DatePicker
+                        style={{width: 200}}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        minDate="2020-09-06"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                        },
+                        dateInput: {
+                            marginLeft: 36
+                        }
+                        }}
+                        onDateChange={(date) => {this.setState({date: date})}}
+                    />
                 </View>
                 <View style={styles.formRow}>
                 <Button

@@ -1,5 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import axios from 'axios';
 
 export const fetchComments = () => (dispatch) => {
     return fetch(baseUrl + 'comments')
@@ -154,3 +155,20 @@ export const addFavorite = (dishId) => ({
     type: ActionTypes.ADD_FAVORITE,
     payload: dishId
 });
+
+export const addComment = (comment) => async dispatch => {
+
+    await axios.post(`${baseUrl}comments`,comment)
+    .then(res =>{
+        dispatch({
+            type:ActionTypes.ADD_COMMENT,
+            payload:res.data
+        })
+    })
+    fetchComments();
+
+}
+export const deleteFavorite = (dishId) => ({
+    type: ActionTypes.DELETE_FAVORITE,
+    payload: dishId
+});  
