@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, addComment } from '../redux/ActionCreators';
 import StarRating from 'react-native-star-rating';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -23,35 +24,37 @@ function RenderDish(props) {
     
         if (dish != null) {
             return(
-                <Card style={{flex:1}}
-                featuredTitle={dish.name}
-                image={{uri: baseUrl + dish.image}}>
-                
-                    <Text style={{margin: 10}}>
-                        {dish.description}
-                    </Text>
-                    <View style={styles.iconCenter}>
-                            <Icon
-                                raised
-                                reverse
-                                name={props.favorite ? 'heart' : 'heart-o'}
-                                type='font-awesome'
-                                color='#f50'
-                                onPress={() => props.favorite ? console.log('Aleardy favorite') : props.onPress()}
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                    <Card style={{flex:1}}
+                    featuredTitle={dish.name}
+                    image={{uri: baseUrl + dish.image}}>
+                    
+                        <Text style={{margin: 10}}>
+                            {dish.description}
+                        </Text>
+                        <View style={styles.iconCenter}>
+                                <Icon
+                                    raised
+                                    reverse
+                                    name={props.favorite ? 'heart' : 'heart-o'}
+                                    type='font-awesome'
+                                    color='#f50'
+                                    onPress={() => props.favorite ? console.log('Aleardy favorite') : props.onPress()}
 
-                            />
-                            <Icon
-                                raised
-                                reverse
-                                name='pencil'
-                                type='font-awesome'
-                                color='#512DA8'
-                                onPress={() =>props.handleComment()}
+                                />
+                                <Icon
+                                    raised
+                                    reverse
+                                    name='pencil'
+                                    type='font-awesome'
+                                    color='#512DA8'
+                                    onPress={() =>props.handleComment()}
 
-                            />
-                    </View>
+                                />
+                        </View>
 
-                </Card>
+                    </Card>
+                </Animatable.View>
             );
         }
         else {
@@ -70,7 +73,6 @@ function RenderComments (props){
         return(
             <View key={index} style={{margin:10}}>
                 <Text style={{fontSize:14}}>{item.comment}</Text>
-                {/* <Text style={{fontSize:12}}>{item.rating} stars</Text> */}
                 <View style={{flexDirection: 'row',justifyContent:'flex-start'}}>
                     <StarRating
                         disabled={false}
@@ -86,13 +88,15 @@ function RenderComments (props){
         )
     }
     return(
-        <Card title="Comments">
-            <FlatList
-                data={comments}
-                renderItem={renderCommentItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </Card>
+        <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+            <Card title="Comments">
+                <FlatList
+                    data={comments}
+                    renderItem={renderCommentItem}
+                    keyExtractor={item => item.id.toString()}
+                />
+            </Card>
+        </Animatable.View>
     );
 
 }
