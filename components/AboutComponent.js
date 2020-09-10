@@ -53,21 +53,25 @@ class About extends Component {
         else if (this.props.leaders.errMess) {
             return(
                 <ScrollView>
-                    <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
-                        <History />
-                        <Card
-                            title='Corporate Leadership'>
-                            <Text>{this.props.leaders.errMess}</Text>
-                        </Card>
-                    </Animatable.View>
+                        <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                            <History />
+                        </Animatable.View>
+                        <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+                            <Card
+                                title='Corporate Leadership'>
+                                <Text>{this.props.leaders.errMess}</Text>
+                            </Card>
+                        </Animatable.View>
                 </ScrollView>
             );
         }
         else {
             return(
                 <ScrollView style={{margin:10}}>
-                    <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+                    <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
                         <History />
+                    </Animatable.View>
+                    <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
                         <Card 
                             title='Corporate Leadership'>
                         <FlatList 
