@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList, Modal, TextInput, Button, StyleSheet, Alert, PanResponder } from 'react-native';
-import { Card, Icon } from 'react-native-elements';
+import { Card, Icon, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, addComment } from '../redux/ActionCreators';
@@ -24,6 +24,12 @@ function RenderDish(props) {
     handlViewRef = ref => this.view = ref;
     const recognizeDrag = ({ moveX, moveY, dx, dy}) => {
         if(dx<-200)
+            return true;
+        else 
+            return false;
+    }
+    const recognizeDrag1 = ({ moveX, moveY, dx, dy}) => {
+        if(dx>200)
             return true;
         else 
             return false;
@@ -56,6 +62,8 @@ function RenderDish(props) {
                     {cancelable:false}
 
                 )
+            else if(recognizeDrag1(gestureState))
+                props.handleComment();
             return true;
         }
     })
@@ -105,11 +113,11 @@ function RenderDish(props) {
 
 function RenderComments (props){
     const comments = props.comments;
-    const onStarRatingPress = (rating) => {
-        this.setState({
-          starCount: rating
-        });
-    }
+    // const onStarRatingPress = (rating) => {
+    //     this.setState({
+    //       starCount: rating
+    //     });
+    // }
     const renderCommentItem = ({item, index}) => {
         return(
             <View key={index} style={{margin:10}}>
@@ -151,7 +159,7 @@ class Dishdetail extends Component {
             author:'',
             comment:'',
             showModal:false,
-            starCount: 0,
+            starCount: 2.5,
             dishRating:null,
             date:''
         };
@@ -191,7 +199,7 @@ class Dishdetail extends Component {
         this.setState({
             author:'',
             comment:'',
-            starCount:0
+            starCount:2.5
         });
     }
 
@@ -213,7 +221,7 @@ class Dishdetail extends Component {
                     onDismiss = {() => this.toggleModal() }
                     onRequestClose = {() => this.toggleModal() }>
                     <View >
-                    <View style={{flexDirection: 'row',justifyContent:'center'}}>
+                    <View style={{flexDirection: 'row',justifyContent:'center',maring:20}}>
                             <Text style={{color:'#FECE24'}}>
                                 {`Rating: `}
                                 <Text style={{fontSize:24, fontWeight: "bold"}}>
@@ -233,32 +241,19 @@ class Dishdetail extends Component {
                             />
                         </View>
                         <View style={{flexDirection: 'row'}} >
-                            <Icon 
-                                raised
-                                reverse
-                                size={10}
-                                backgroundColor='black'
-                                name='user'
-                                type='font-awesome'
-                            />
-                            <TextInput 
+                            <Input
                                 placeholder="Author"
-                                onChangeText={(text) => this.setState({author:text})}
-                                defaultValue={this.state.author}
+                                leftIcon={{ type: 'font-awesome', name: 'user-o' }}
+                                onChangeText={(author) => this.setState({author})}
+                                value={this.state.author}
                             />
                         </View>
                         <View style={{flexDirection: 'row',marginBottom:10}} >
-                            <Icon 
-                                raised
-                                reverse
-                                size={10}
-                                name='comment'
-                                type='font-awesome'
-                            />
-                            <TextInput
+                            <Input
                                 placeholder="Comment"
-                                onChangeText={(text) => this.setState({comment:text})}
-                                defaultValue={this.state.comment}
+                                leftIcon={{ type: 'font-awesome', name: 'comment-o' }}
+                                onChangeText={(comment) => this.setState({comment})}
+                                value={this.state.comment}
                             />
                         </View>
                             <Button style={{flex:1, marginBottom:15}}
