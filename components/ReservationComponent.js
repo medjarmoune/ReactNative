@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal, Alert } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
+import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 class Reservation extends Component {
@@ -15,7 +18,6 @@ class Reservation extends Component {
 
         }
     }
-
     handleReservation() {
         console.log(JSON.stringify(this.state));
         // this.toggleModal();
@@ -31,7 +33,7 @@ class Reservation extends Component {
                 },
                 {
                     text:'OK',
-                    onPress:() => { this.resetForm(); },
+                    onPress:() => {this.presentLocalNotification(this.state.date) ; this.resetForm(); },
 
                 }
             ],
@@ -49,6 +51,31 @@ class Reservation extends Component {
             date: '',
             showModal: false
         });
+    }
+    async obtainNotificationPermission(){
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
+        if(permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+            if(permission.status !== 'granted'){
+                Alert.alert('Permission not granted to show notification')
+            }
+        }
+        return permission;
+    }
+    async presentLocalNotification(date){
+            await this.obtainNotificationPermission();
+            Notifications.presentNotificationAsync({
+                title: 'Your Reservation',
+                body: 'Reservation for '+ date + ' requested',
+                ios: {
+                    sound: true
+                },
+                android: {
+                    sound: true,
+                    vibrate: true,
+                    color: '#512DA8'
+                }
+            });
     }
     render() {
 
@@ -100,7 +127,7 @@ class Reservation extends Component {
                                 marginLeft: 36
                             }
                             }}
-                            onDateChange={(date) => {this.setState({date: date})}}
+                            onDateChange={(date) => {this.setState({date:date})}}
                         />
                     </View>
                     <View style={styles.formRow}>
