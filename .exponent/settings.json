@@ -1,0 +1,8 @@
+{
+  "hostType": "ngrok",
+  "dev": false,
+  "strict": true,
+  "minify": false,
+  "urlType": "exp",
+  "urlRandomness": null
+}

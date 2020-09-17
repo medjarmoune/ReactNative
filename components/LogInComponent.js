@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, ScrollView, Image, PermissionsAndroid } from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import { baseUrl } from '../shared/baseUrl'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as Permissions from 'expo-permissions';
+import { Asset } from "expo-asset";
+import * as ImageManipulator from "expo-image-manipulator";
 
 class LogInTab extends Component {
    
@@ -52,6 +54,9 @@ class LogInTab extends Component {
             await  SecureStore.deleteItemAsync('userinfo')
                 .catch((error) => console.log('Could not delete user info', error));
     }
+
+    
+    
     render() {
         return (
             <View style={{marginTop:20}}>
@@ -157,10 +162,36 @@ class RegisterTab extends Component {
             });
             if(!captureImage.cancelled){
                 console.log(captureImage);
-                this.setState({imageUrl: captureImage.uri});
+                this.processImage(captureImage.uri);
+            }
+        }
+    }
+    getImageFromGallery = async () => {
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+        if(cameraPermission.status ==='granted' && cameraRollPermission.status === 'granted'){
+
+            let pickImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect:[4,3],
+            });
+            if(!pickImage.cancelled){
+                console.log(pickImage);
+                this.processImage(pickImage.uri);
             }
         }
 
+    }
+    processImage = async (imageUri) => {
+        let processeImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [
+                {resize: { width:400}}
+            ],
+            {format:'png'}
+        );
+        console.log(processeImage);
+        this.setState({imageUrl: processeImage.uri});
     }
     handleRegister = async() => {
         console.log(JSON.stringify(this.state));
@@ -169,7 +200,7 @@ class RegisterTab extends Component {
                 .catch((error) => console.log('Could not save user info', error));
     }
 
-
+    
     render() {
         return(
             <ScrollView>
@@ -184,6 +215,13 @@ class RegisterTab extends Component {
                         <Button
                             title="Camera"
                             onPress={this.getImageFromCamera}
+                            buttonStyle={{backgroundColor:'#9575CD'}}
+                        />
+                    </View>
+                    <View style={{justifyContent:'center',alignItems: 'center', marginLeft:20}}>
+                        <Button
+                            title="Gallery"
+                            onPress={this.getImageFromGallery}
                             buttonStyle={{backgroundColor:'#9575CD'}}
                         />
                     </View>

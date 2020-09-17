@@ -181,6 +181,10 @@ class Dishdetail extends Component {
             date:''
         };
     }
+
+    static navigationOptions = {
+        title: 'Dishdetail',
+    };
     onStarRatingPress(rating) {
         this.setState({
           starCount: rating

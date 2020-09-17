@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, View, Image, StyleSheet } from 'react-native';
+import { ScrollView, Text, View, Image, StyleSheet, ToastAndroid } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -64,8 +65,7 @@ function MenuNavigatorScreen(){
                         name='menu' 
                         size={24}
                         color='white'
-                        onPress={() => 
-                            navigation.toggleDrawer()}
+                        onPress={() => navigation.toggleDrawer()}
                     />
                 )
             
@@ -91,21 +91,22 @@ function FavoritesNavigatoreScreen () {
         }
       }}
     >
-        <FavoritesNavigator.Screen name='My Favorites Dishes' component={Favorites}
-          options={
-            ({navigation}) => ({
-                headerLeft: () => (
-                    <Icon 
-                        name='menu' 
-                        size={24}
-                        color='white'
-                        onPress={() => navigation.toggleDrawer()}
-                    />
-                )
-            
-            })
-         }
-        />
+    <FavoritesNavigator.Screen name='My Favorites Dishes' component={Favorites}
+      options={
+        ({navigation}) => ({
+            headerLeft: () => (
+                <Icon 
+                    name='menu' 
+                    size={24}
+                    color='white'
+                    onPress={() => navigation.toggleDrawer()}
+                />
+            )
+        
+        })
+      }
+    />
+        <MenuNavigator.Screen name='Dishdetail' component={Dishdetail} options={{headerTitle:'Dish Detail'}}/>
     </FavoritesNavigator.Navigator>
   )
 }
@@ -385,12 +386,42 @@ function MainNavigatorDrawer(){
 );
 }
 class Main extends Component {
+
   componentDidMount() {
     this.props.fetchDishes();
     this.props.fetchComments();
     this.props.fetchPromos();
     this.props.fetchLeaders();
     console.disableYellowBox = true;
+    
+    // NetInfo.fetch().then((connectionInfo) => {
+    //   ToastAndroid.show('Initial Network Connectivity Type: '
+    //       + connectionInfo.type, ToastAndroid.LONG)
+    // });
+  
+    // NetInfo.addEventListener(connectionChange => this.handleConnectivityChange(connectionChange))
+  }
+
+  // componentWillUnmount() {
+  //   NetInfo.removeEventListener(connectionChange => this.handleConnectivityChange(connectionChange))
+  // }
+
+  handleConnectivityChange = (connectionInfo) => {
+    switch (connectionInfo.type) {
+        case 'none': 
+            ToastAndroid.show ('You are now offline', ToastAndroid.LONG);
+            break;
+        case 'wifi':
+            ToastAndroid.show ('You are now on WiFi', ToastAndroid.LONG);
+            break;
+        case 'cellular':
+            ToastAndroid.show ('You are now on Cellular', ToastAndroid.LONG);
+            break;
+        case 'unknown' :
+            ToastAndroid.show ('You are now have an Unknown connection', ToastAndroid.LONG);
+            break;
+        default: 
+    }
   }
   render() {
  
